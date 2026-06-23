@@ -4,9 +4,9 @@
     </div>
 
     <div class="w-full overflow-x-auto pb-4 scrollbar-thin">
-        <div class="grid grid-rows-2 grid-flow-col gap-6" style="min-width: 900px;">
+        <div class="grid grid-cols-3 gap-4" style="min-width: 900px;">
             @foreach($availableDevices as $device)
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 w-72 flex flex-col items-center justify-between hover:shadow-md transition">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 w-80 flex flex-col items-center justify-between hover:shadow-md transition">
                 <div class="w-full h-36 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center mb-3">
                     @if($device->foto)
                         <img src="{{ asset('storage/' . $device->foto) }}" alt="Foto Perangkat" class="w-full h-full object-cover">

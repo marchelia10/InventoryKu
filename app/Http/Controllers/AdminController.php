@@ -40,10 +40,12 @@ class AdminController extends Controller
                 return "Pengajuan baru dari {$loan->user->name} membutuhkan verifikasi.";
             } elseif ($loan->status === 'Disetujui') {
                 return "Pengajuan {$loan->user->name} disetujui oleh IT.";
-            } elseif ($loan->status === 'Dikembalikan') {
-                return "Perangkat dari {$loan->user->name} telah berhasil diterima kembali.";
+            } elseif ($loan->status === 'Ditolak') {
+                return "Pengajuan {$loan->user->name} ditolak oleh IT.";
+            } elseif ($loan->status === 'Menunggu Pengembalian') {
+                return "Perangkat dari {$loan->user->name} menunggu pemeriksaan fisik.";
             } else {
-                return "Pengajuan {$loan->user->name} telah ditolak.";
+                return "Perangkat dari {$loan->user->name} telah diterima kembali.";
             }
         });
 
@@ -173,6 +175,7 @@ class AdminController extends Controller
         $loan->update([
             'status' => 'Disetujui',
             'device_id' => $device->id, 
+            'catatan_admin' => $request->catatan
         ]);
 
         // Update Device Status
@@ -184,8 +187,16 @@ class AdminController extends Controller
     // 3. Reject Request
     public function reject(Request $request, $id)
     {
+        $request->validate([
+            'catatan' => 'nullable|string'
+        ]);
+
         $loan = Loan::findOrFail($id);
-        $loan->update(['status' => 'Ditolak']);
+
+        $loan->update([
+            'status' => 'Ditolak',
+            'catatan_admin' => $request->catatan
+        ]);
 
         return redirect()->route('admin.verifikasi')->with('error', 'Pengajuan telah ditolak.');
     }
@@ -223,7 +234,10 @@ class AdminController extends Controller
         $device = Device::findOrFail($loan->device_id);
 
         // A. Update the Loan Record
-        $loan->update(['status' => 'Dikembalikan']);
+        $loan->update([
+            'status' => 'Dikembalikan',
+            'catatan_admin' => $request->catatan
+        ]);
 
         // B. Smart Inventory Restocking Logic based on physical condition
         $newDeviceStatus = ($request->kondisi_fisik === 'RusakBerat') ? 'Perbaikan' : 'Tersedia';

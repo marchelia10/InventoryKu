@@ -72,9 +72,9 @@
                             <select name="kondisi_fisik" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500" required>
                                 <option value="">-- Pilih Kondisi Terkini --</option>
                                 <option value="Baik">Baik - Tidak ada kerusakan</option>
-                                <option value="CukupBaik">Cukup Baik - ada goresan kecil</option>
-                                <option value="RusakRingan">Rusak ringan</option>
-                                <option value="RusakBerat">Rusak berat</option>
+                                <option value="Cukup Baik">Cukup Baik - ada goresan kecil</option>
+                                <option value="Rusak Ringan">Rusak ringan</option>
+                                <option value="Rusak Berat">Rusak berat</option>
                             </select>
                         </div>
                     </div>

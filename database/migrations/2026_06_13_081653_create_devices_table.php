@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_perangkat');
             $table->string('merek')->nullable();
-            $table->enum('kondisi', ['Baik', 'Cukup Baik', 'Perbaikan'])->default('Baik');
+            $table->enum('kondisi', ['Baik', 'Cukup Baik', 'Rusak Ringan', 'Rusak Berat'])->default('Baik');
             $table->date('tanggal_pengadaan')->nullable();
             $table->string('jenis_perangkat')->nullable();
             $table->string('nomor_seri')->unique();

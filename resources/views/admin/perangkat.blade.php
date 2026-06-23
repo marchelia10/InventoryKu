@@ -29,8 +29,9 @@
                         <label class="block text-sm font-medium">Kondisi</label>
                         <select name="kondisi" class="w-full border rounded p-2">
                             <option value="Baik" {{ old('kondisi', $editDevice->kondisi ?? '') == 'Baik' ? 'selected' : '' }}>Baik</option>
-                            <option value="CukupBaik" {{ old('kondisi', $editDevice->kondisi ?? '') == 'CukupBaik' ? 'selected' : '' }}>Cukup Baik</option>
-                            <option value="Perbaikan" {{ old('kondisi', $editDevice->kondisi ?? '') == 'Perbaikan' ? 'selected' : '' }}>Perbaikan</option>
+                            <option value="Cukup Baik" {{ old('kondisi', $editDevice->kondisi ?? '') == 'Cukup Baik' ? 'selected' : '' }}>Cukup Baik</option>
+                            <option value="Rusak Ringan" {{ old('kondisi', $editDevice->kondisi ?? '') == 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan</option>
+                            <option value="Rusak Berat" {{ old('kondisi', $editDevice->kondisi ?? '') == 'Rusak Berat' ? 'selected' : '' }}>Rusak Berat</option>
                         </select>
                     </div>
                     <div>
@@ -96,23 +97,25 @@
         <table class="min-w-full bg-white border">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="py-2 px-4 border-b">Nama</th>
-                    <th class="py-2 px-4 border-b">Jenis</th>
-                    <th class="py-2 px-4 border-b">No. Seri</th>
+                    <th class="py-2 px-4 border-b text-start">Nama</th>
+                    <th class="py-2 px-4 border-b text-start">Jenis</th>
+                    <th class="py-2 px-4 border-b text-start">No. Seri</th>
+                    <th class="py-2 px-4 border-b text-start">Keterangan</th>
                     <th class="py-2 px-4 border-b">Status</th>
-                    <th class="py-2 px-4 border-b">Aksi</th>
+                    <th class="py-2 px-4 border-b w-32">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($devices as $device)
                 <tr class="text-center">
-                    <td class="py-2 px-4 border-b">{{ $device->nama_perangkat }}</td>
-                    <td class="py-2 px-4 border-b">{{ $device->jenis_perangkat }}</td>
-                    <td class="py-2 px-4 border-b">{{ $device->nomor_seri }}</td>
+                    <td class="py-2 px-4 border-b text-start">{{ $device->nama_perangkat }}</td>
+                    <td class="py-2 px-4 border-b text-start">{{ $device->jenis_perangkat }}</td>
+                    <td class="py-2 px-4 border-b text-start">{{ $device->nomor_seri }}</td>
+                    <td class="py-2 px-4 border-b text-start text-wrap">{{ $device->keterangan }}</td>
                     <td class="py-2 px-4 border-b">
                         <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">{{ $device->status }}</span>
                     </td>
-                    <td class="py-2 px-4 border-b space-x-2">
+                    <td class="py-2 px-4 border-b space-x-2 whitespace-nowrap">
                         <a href="{{ route('admin.perangkat.edit', $device->id) }}" class="text-blue-500 hover:underline">Edit</a>
                         
                         <form action="{{ route('admin.perangkat.destroy', $device->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus perangkat ini?');">

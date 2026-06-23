@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('tanggal_peminjaman');
             $table->date('tanggal_pengembalian')->nullable();
             $table->enum('status', ['Menunggu Verifikasi', 'Disetujui', 'Ditolak', 'Menunggu Pengembalian', 'Dikembalikan'])->default('Menunggu Verifikasi');
+            $table->text('catatan_admin')->nullable();
             $table->timestamps();
         });
     }

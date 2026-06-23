@@ -10,42 +10,64 @@
             </a>
         </div>
 
-        <table class="min-w-full bg-white border">
-            <thead class="bg-[#C7EACD] border-b border-[#A3D2AC]">
-                <tr>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800">Perangkat</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800">Tanggal Pinjam</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800">Status</th>
-                    <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800">Aksi Pengembalian</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($loans as $loan)
-                <tr class="border-b text-sm">
-                    <td class="py-3 px-4 font-medium">{{ $loan->jenis_barang }}</td>
-                    <td class="py-3 px-4">{{ \Carbon\Carbon::parse($loan->tanggal_peminjaman)->format('d M Y') }}</td>
-                    <td class="py-3 px-4">
-                        <span class="px-2 py-1 rounded-full text-xs font-semibold 
-                            {{ $loan->status == 'Disetujui' ? 'bg-blue-100 text-blue-800' : ($loan->status == 'Dikembalikan' ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800') }}">
-                            {{ $loan->status }}
-                        </span>
-                    </td>
-                    <td class="py-3 px-4">
-                        @if($loan->status == 'Disetujui')
-                            <form action="{{ route('karyawan.pengembalian.submit', $loan->id) }}" method="POST" class="flex items-center space-x-2">
-                                @csrf
-                                <input type="date" name="tanggal_pengembalian" class="border-gray-300 rounded text-sm p-1.5" required>
-                                <button type="submit" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Ajukan</button>
-                            </form>
-                        @elseif($loan->status == 'Menunggu Pengembalian')
-                            <span class="text-gray-500 italic">Menunggu Cek IT...</span>
-                        @else
-                            <span class="text-green-600 font-semibold">{{ \Carbon\Carbon::parse($loan->tanggal_pengembalian)->format('d M Y') }}</span>
-                        @endif
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border">
+                <thead class="bg-[#C7EACD] border-b border-[#A3D2AC]">
+                    <tr>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800">Perangkat</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800">Tanggal Pinjam</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800">Status</th>
+                        
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800 w-64">Catatan IT</th>
+                        
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-800">Aksi Pengembalian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($loans as $loan)
+                    <tr class="border-b text-sm hover:bg-gray-50 transition-colors">
+                        <td class="py-3 px-4 font-medium align-top">{{ $loan->jenis_barang }}</td>
+                        <td class="py-3 px-4 align-top">{{ \Carbon\Carbon::parse($loan->tanggal_peminjaman)->format('d M Y') }}</td>
+                        <td class="py-3 px-4 align-top">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap
+                                {{ $loan->status == 'Disetujui' ? 'bg-blue-100 text-blue-800' : ($loan->status == 'Dikembalikan' ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800') }}">
+                                {{ $loan->status }}
+                            </span>
+                        </td>
+                        
+                        <td class="py-3 px-4 align-top">
+                            @if($loan->catatan_admin)
+                                {{ $loan->catatan_admin }}
+                            @else
+                                <span class="text-gray-400 italic">-</span>
+                            @endif
+                        </td>
+
+                        <td class="py-3 px-4 align-top">
+                            @if($loan->status == 'Disetujui')
+                                <form action="{{ route('karyawan.pengembalian.submit', $loan->id) }}" method="POST" class="flex items-center space-x-2">
+                                    @csrf
+                                    <input type="date" name="tanggal_pengembalian" class="border-gray-300 rounded text-sm p-1.5" required>
+                                    <button type="submit" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Ajukan</button>
+                                </form>
+                            @elseif($loan->status == 'Menunggu Pengembalian')
+                                <span class="text-gray-500 italic">Menunggu Cek IT...</span>
+                            @else
+                                <span class="text-green-600 font-semibold">{{ \Carbon\Carbon::parse($loan->tanggal_pengembalian)->format('d M Y') }}</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+
+                    @if($loans->isEmpty())
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-gray-500 italic">
+                            Belum ada data aset yang dipinjam atau dikembalikan.
+                        </td>
+                    </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
     </div>
 </x-app-layout>
